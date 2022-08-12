@@ -1,4 +1,4 @@
-package com.seven.codesnippet.Security;
+package com.seven.codesnippet.Configuration;
 
 
 import lombok.RequiredArgsConstructor;
