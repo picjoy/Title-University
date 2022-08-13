@@ -11,16 +11,16 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class TitleComment {
+public class TitleComment extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column (nullable = false)
     private String content;
 
-    @Column
+    @Column (nullable = false)
     private String auther;
 
     @OneToMany(mappedBy = "subcomment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
