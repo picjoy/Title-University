@@ -28,6 +28,15 @@ public class Member {
     @Column(nullable = false)
     private String nickname;
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<com.seven.codesnippet.Domain.TitlePost> postList;
+
+    public Member(String username, String password, String nickname) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -52,13 +61,5 @@ public class Member {
         return getClass().hashCode();
     }
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<com.seven.codesnippet.Domain.TitlePost> postList;
-
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<com.seven.codesnippet.Domain.TitleComment> commentList;
-
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<com.seven.codesnippet.Domain.TitleSubComment> reCommentList;
 
 }

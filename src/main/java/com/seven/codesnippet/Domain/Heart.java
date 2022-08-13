@@ -11,6 +11,7 @@ public class Heart {
     @Column(nullable = false)
     private String Auther;
 
-    @Column(nullable = false)
-    private Long postid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
+    private TitlePost post;
 }

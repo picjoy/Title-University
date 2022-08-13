@@ -50,6 +50,8 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/posts/**").permitAll()
+                .antMatchers("/test/member").permitAll()
+                .antMatchers("/api/bestpost").permitAll()
                 .anyRequest().permitAll();
 
         return http.build();

@@ -26,8 +26,4 @@ public class TitleSubComment extends Timestamped {
     @JoinColumn(name = "comment_id", nullable = false)
     private TitleComment subcomment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
-
 }
