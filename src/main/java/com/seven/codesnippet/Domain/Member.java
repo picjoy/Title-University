@@ -2,6 +2,7 @@ package com.seven.codesnippet.Domain;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,22 +21,13 @@ public class Member {
     private Long id;
 
     @Column(nullable = false)
-    private String username;
+    private String email;
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
     private String nickname;
-
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<com.seven.codesnippet.Domain.TitlePost> postList;
-
-    public Member(String username, String password, String nickname) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -61,5 +53,11 @@ public class Member {
         return getClass().hashCode();
     }
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<com.seven.codesnippet.Domain.TitlePost> postList;
+
+    public boolean validatePassword(PasswordEncoder passwordEncoder, String password) {
+        return passwordEncoder.matches(password, this.password);
+    }
 
 }
