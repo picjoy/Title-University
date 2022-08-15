@@ -8,10 +8,11 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
-@Builder
-@Getter
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 public class Member {
 

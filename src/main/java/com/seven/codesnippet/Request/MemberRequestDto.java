@@ -34,7 +34,7 @@ public class MemberRequestDto {
     private String password;
 
     @NotBlank
-    private String passwordConfirm;
+    private String passwordCheck;
 
 
 }
