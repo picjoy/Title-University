@@ -2,16 +2,16 @@ package com.seven.codesnippet.Domain;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
-@NoArgsConstructor
 @Builder
-@AllArgsConstructor
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Member {
 
@@ -19,13 +19,13 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String username;
+    @Column(nullable = false)
+    private String email;
 
-    @Column
+    @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = false)
     private String nickname;
 
     @Override
@@ -55,10 +55,8 @@ public class Member {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<com.seven.codesnippet.Domain.TitlePost> postList;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<com.seven.codesnippet.Domain.TitleComment> commentList;
-
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<com.seven.codesnippet.Domain.TitleSubComment> reCommentList;
+    public boolean validatePassword(PasswordEncoder passwordEncoder, String password) {
+        return passwordEncoder.matches(password, this.password);
+    }
 
 }
