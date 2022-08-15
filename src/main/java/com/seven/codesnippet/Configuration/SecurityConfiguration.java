@@ -1,6 +1,7 @@
 package com.seven.codesnippet.Configuration;
 
 
+
 import com.seven.codesnippet.Jwt.AccessDeniedHandlerException;
 import com.seven.codesnippet.Jwt.AuthenticationEntryPointException;
 import com.seven.codesnippet.Jwt.TokenProvider;
@@ -67,9 +68,10 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/member/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/post/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/comment/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/posts/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/comments/**").permitAll()
                 .antMatchers("/api/member/logout").permitAll()
+                .antMatchers("/api/bestpost").permitAll()
                 .anyRequest().authenticated()
 
 

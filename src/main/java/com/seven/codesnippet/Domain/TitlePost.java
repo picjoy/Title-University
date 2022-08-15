@@ -34,6 +34,12 @@ public class TitlePost extends Timestamped{
     @Column
     private Long heart;
 
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Heart> heartList;
+
+    public void update(Long heart){
+        this.heart = heart;
+    }
 
     public TitlePost(String title, Member member, Long heart,String image) {
         this.title = title;
@@ -41,4 +47,9 @@ public class TitlePost extends Timestamped{
         this.image = image;
         this.heart = heart;
     }
+
+    public boolean validateMember(Member member) {
+        return !this.member.equals(member);
+    }
+
 }

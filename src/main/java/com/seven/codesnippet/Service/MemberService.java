@@ -38,7 +38,7 @@ public class MemberService {
                     "중복된 닉네임 입니다.");
         }
 
-        if (!requestDto.getPassword().equals(requestDto.getPasswordConfirm())) {
+        if (!requestDto.getPassword().equals(requestDto.getPasswordCheck())) {
             return ResponseDto.fail("PASSWORDS_NOT_MATCHED",
                     "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         }
@@ -77,6 +77,7 @@ public class MemberService {
         return ResponseDto.success(
                 MemberResponseDto.builder()
                         .id(member.getId())
+                        .email(member.getEmail())
                         .nickname(member.getNickname())
                         .build()
         );
