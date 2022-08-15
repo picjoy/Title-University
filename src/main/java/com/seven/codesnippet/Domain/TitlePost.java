@@ -37,6 +37,10 @@ public class TitlePost extends Timestamped{
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Heart> heartList;
 
+    public void update(Long heart){
+        this.heart = heart;
+    }
+
     public TitlePost(String title, Member member, Long heart,String image) {
         this.title = title;
         this.member = member;

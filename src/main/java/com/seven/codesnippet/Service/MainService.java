@@ -4,7 +4,11 @@ package com.seven.codesnippet.Service;
 import com.seven.codesnippet.Controller.Dto.ResponseDto;
 
 import com.seven.codesnippet.Controller.Dto.TitlePostListDto;
+import com.seven.codesnippet.Controller.Dto.TopTenDto;
+import com.seven.codesnippet.Domain.Member;
 import com.seven.codesnippet.Domain.TitlePost;
+import com.seven.codesnippet.Repository.HeartRepository;
+import com.seven.codesnippet.Repository.MemberRepository;
 import com.seven.codesnippet.Repository.TitleCommentRepository;
 import com.seven.codesnippet.Repository.TitlePostRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +22,19 @@ import java.util.List;
 public class MainService {
     private final TitlePostRepository titlePostRepository;
     private final TitleCommentRepository titleCommentRepository;
+    private final MemberRepository memberRepository;
+    private final HeartRepository heartRepository;
 
     public ResponseDto<?> BestList(){
+        Member member = memberRepository.getReferenceById(1L);
         List<TitlePost> titlePostList = titlePostRepository.findTop10ByHeartGreaterThanOrderByHeartDesc(10L);
-        List<TitlePostListDto> titlePostListDtos = new ArrayList<>();
+        List<TopTenDto> toptenDto = new ArrayList<>();
         for (TitlePost titlepost :titlePostList) {
-            titlePostListDtos.add(new TitlePostListDto(titlepost));
+            Boolean LikeExist = heartRepository.existsByAutherAndPost(member.getNickname(),titlepost);
+            toptenDto.add(new TopTenDto(titlepost,LikeExist));
         }
 
-        return ResponseDto.success(titlePostListDtos);
+        return ResponseDto.success(toptenDto);
     }
 
     public ResponseDto<?> NewList(){

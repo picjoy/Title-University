@@ -9,7 +9,7 @@ public class Heart {
     private Long id;
 
     @Column(nullable = false)
-    private String Auther;
+    private String auther;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
