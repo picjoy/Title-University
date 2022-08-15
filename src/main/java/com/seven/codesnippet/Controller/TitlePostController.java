@@ -20,24 +20,6 @@ public class TitlePostController {
     private final TitlePostRepository titlePostRepository;
     private final MemberRepository memberRepository;
 
-    @PostMapping("/test/member")
-    @ResponseBody
-    private String member(){
-        Member member = new Member("username","password","nickname");
-        memberRepository.save(member);
-        return "멤버등록완료";
-    }
-
-    @ResponseBody
-    @PostMapping("/api/posts/")
-    public String post(){
-        Member member = memberRepository.getReferenceById(1L);
-        for (int i = 0; i <20 ; i++) {
-            TitlePost titlePost = new TitlePost("title",member, (long) i,"image");
-            titlePostRepository.save(titlePost);
-        }
-        return "게시글 작성완료!";
-    }
 
     @ResponseBody
     @GetMapping("/api/bestpost")
