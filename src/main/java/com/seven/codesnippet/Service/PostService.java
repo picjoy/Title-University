@@ -5,16 +5,19 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.util.IOUtils;
+import com.seven.codesnippet.Controller.Dto.PostOwnerDto;
 import com.seven.codesnippet.Controller.Dto.ResponseDto;
 import com.seven.codesnippet.Controller.Dto.TopTenDto;
 import com.seven.codesnippet.Domain.Member;
 import com.seven.codesnippet.Domain.TitlePost;
+import com.seven.codesnippet.Jwt.TokenProvider;
+import com.seven.codesnippet.Repository.HeartRepository;
 import com.seven.codesnippet.Repository.TitleCommentRepository;
 import com.seven.codesnippet.Repository.TitlePostRepository;
 import com.seven.codesnippet.Repository.TitleSubCommentRepository;
 import com.seven.codesnippet.Shared.CommonUtils;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +37,8 @@ public class PostService {
 
 
     private final TitlePostRepository titlePostRepository;
-    private final TitleCommentRepository titleCommentRepository;
-    private final TitleSubCommentRepository titleSubCommentRepository;
+    private final TokenProvider tokenProvider;
+    private final HeartRepository heartRepository;
     private final AmazonS3Client amazonS3Client;
 
 
@@ -97,7 +100,7 @@ public class PostService {
         boolean postowner;
 //    로그인 되어있을시
         if (member != null) {
-            LikeExist = likesRepository.existsByMemberAndPost(member, post);
+            LikeExist = heartRepository.existsByMemberAndPost(member.getNickname(), post);
             postowner = Objects.equals(post.getMember().getNickname(), member.getNickname());
         }
 //    로그인 안되어있을시
@@ -128,7 +131,7 @@ public class PostService {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
 
-        Post post = isPresentPost(id);
+        TitlePost post = isPresentPost(id);
         if (null == post) {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
         }
@@ -137,7 +140,7 @@ public class PostService {
             return ResponseDto.fail("BAD_REQUEST", "작성자만 삭제할 수 있습니다.");
         }
 
-        postRepository.delete(post);
+        titlePostRepository.delete(post);
         return ResponseDto.success("삭제가 완료되었습니다.");
     }
 

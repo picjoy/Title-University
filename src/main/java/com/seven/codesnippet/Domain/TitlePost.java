@@ -47,4 +47,9 @@ public class TitlePost extends Timestamped{
         this.image = image;
         this.heart = heart;
     }
+
+    public boolean validateMember(Member member) {
+        return !this.member.equals(member);
+    }
+
 }
