@@ -23,11 +23,6 @@ public class PostController {
         return postService.createPost(title, request,multipartFile);
     }
 
-    // 게시글 상세 불러오기
-    @RequestMapping(value = "/api/posts/{id}", method = RequestMethod.GET)
-    public ResponseDto<?> getPost(@PathVariable Long id, HttpServletRequest request) {
-        return postService.getPost(id,request);
-    }
 
     // 게시글 삭제
     @RequestMapping(value = "/api/posts/{id}", method = RequestMethod.DELETE)

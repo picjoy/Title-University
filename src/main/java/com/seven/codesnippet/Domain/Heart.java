@@ -14,4 +14,5 @@ public class Heart {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private TitlePost post;
+
 }

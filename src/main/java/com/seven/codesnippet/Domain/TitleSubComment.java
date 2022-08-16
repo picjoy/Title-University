@@ -1,5 +1,6 @@
 package com.seven.codesnippet.Domain;
 
+import com.seven.codesnippet.Request.ReCommentRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,14 +17,23 @@ public class TitleSubComment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String content;
 
-    @Column
-    private String auther;
+    @Column(nullable = false)
+    private String member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id", nullable = false)
-    private TitleComment subcomment;
+    private TitleComment comment;
 
+
+
+    public boolean validateMember(Member member) {
+        return !this.member.equals(member.getNickname());
+    }
+
+    public void update(ReCommentRequestDto requestDto) {
+        this.content = requestDto.getContents();
+    }
 }
