@@ -1,7 +1,6 @@
 package com.seven.codesnippet.Controller;
 
 import com.seven.codesnippet.Controller.Dto.ResponseDto;
-
 import com.seven.codesnippet.Request.CommentPutRequestDto;
 import com.seven.codesnippet.Request.CommentRequestDto;
 import com.seven.codesnippet.Request.ReCommentRequestDto;
@@ -21,12 +20,6 @@ public class TitleDetailController {
 
 
     private final DetailService detailService;
-
-    // 게시물 좋아요
-    @ResponseBody
-    @PostMapping("/api/posts/heart/{postId}")
-    public ResponseDto<?> heartTitle(@PathVariable Long postId, HttpServletRequest request) {
-        return detailService.heartTitle(postId, request);
 
 
 
@@ -86,6 +79,5 @@ public class TitleDetailController {
     @RequestMapping(value = "/api/subcomments/{id}", method = RequestMethod.DELETE)
     public ResponseDto<?> deletereComment(@PathVariable Long id, HttpServletRequest request) {
         return detailService.deleteReComment(id, request);
-
     }
 }
