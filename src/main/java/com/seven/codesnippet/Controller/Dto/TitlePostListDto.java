@@ -9,13 +9,15 @@ public class TitlePostListDto {
     String title;
     String userNickname;
     String imageUrl;
+    Long comment_num;
     Long like_num;
 
-    public TitlePostListDto(TitlePost titlePost) {
+    public TitlePostListDto(TitlePost titlePost, Long aLong) {
         this.id = titlePost.getId();
         this.title = titlePost.getTitle();
         this.userNickname = titlePost.getMember().getNickname();
         this.imageUrl = titlePost.getImage();
         this.like_num = titlePost.getHeart();
+        this.comment_num = aLong;
     }
 }

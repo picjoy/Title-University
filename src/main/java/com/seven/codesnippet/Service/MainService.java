@@ -30,7 +30,7 @@ public class MainService {
         List<TitlePost> titlePostList = titlePostRepository.findTop10ByHeartGreaterThanOrderByHeartDesc(10L);
         List<TopTenDto> toptenDto = new ArrayList<>();
         for (TitlePost titlepost :titlePostList) {
-            Boolean LikeExist = heartRepository.existsByMemberAndPost(member,titlepost);
+            Boolean LikeExist = heartRepository.existsByMemberAndPost(member.getNickname(),titlepost);
             toptenDto.add(new TopTenDto(titlepost,LikeExist));
         }
 
@@ -41,7 +41,7 @@ public class MainService {
         List<TitlePost> titlePostList = titlePostRepository.findTop100ByOrderByCreatedAtDesc();
         List<TitlePostListDto> titlePostListDtos = new ArrayList<>();
         for (TitlePost titlepost :titlePostList) {
-            titlePostListDtos.add(new TitlePostListDto(titlepost));
+            titlePostListDtos.add(new TitlePostListDto(titlepost,titleCommentRepository.countTitleCommentByPost(titlepost)));
         }
         return ResponseDto.success(titlePostListDtos);
     }

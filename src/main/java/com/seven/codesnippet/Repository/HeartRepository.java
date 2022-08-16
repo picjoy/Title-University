@@ -6,23 +6,14 @@ import com.seven.codesnippet.Domain.TitlePost;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HeartRepository extends JpaRepository<Heart, Long> {
 
-    Long countAllByPostId(Long postId);
 
-    Long countByMemberIdAndPostId(Long memberId, Long postId);
+    List<Heart> findAllByMember(String member);
 
-
-    @Transactional
-    void deleteById(Long Id);
-
-    List<Heart> findAllByMember(Member member);
-
-    Boolean existsByMemberAndPost(Member member, TitlePost post);
-
-    Heart findByMemberIdAndPostId(Long memberId, Long postId);
+    Boolean existsByMemberAndPost(String member, TitlePost post);
 }

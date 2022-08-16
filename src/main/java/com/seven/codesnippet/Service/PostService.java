@@ -88,28 +88,7 @@ public class PostService {
         return ResponseDto.success("작성이 완료되었습니다.");
     }
 
-    @Transactional(readOnly = true)
-    public ResponseDto<?> getPost(Long id, HttpServletRequest request) { // 게시글의 id
-        TitlePost post = isPresentPost(id);
-        if (null == post) {
-            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
-        }
-        Member member = validateMember(request);
-        boolean LikeExist;
-        boolean postowner;
-// 로그인 되어있을시
-        if (member != null) {
-            LikeExist = heartRepository.existsByMemberAndPost(member, post);
-            postowner = Objects.equals(post.getMember().getNickname(), member.getNickname());
-        }
-// 로그인 안되어있을시
-        else {
-            LikeExist = false;
-            postowner = false;
-        }
-        PostOwnerDto posts = new PostOwnerDto(post,LikeExist,postowner);
-        return ResponseDto.success(posts);
-    }
+
 
     @Transactional
     public ResponseDto<?> deletePost(Long id, HttpServletRequest request) {

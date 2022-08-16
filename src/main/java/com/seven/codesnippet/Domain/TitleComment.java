@@ -1,5 +1,7 @@
 package com.seven.codesnippet.Domain;
 
+import com.seven.codesnippet.Request.CommentPutRequestDto;
+import com.seven.codesnippet.Request.CommentRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,14 +23,23 @@ public class TitleComment extends Timestamped{
     private String content;
 
     @Column (nullable = false)
-    private String auther;
+    private String member;
 
-    @OneToMany(mappedBy = "subcomment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TitleSubComment> titlecomments;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private TitlePost post;
 
+    public boolean validateMember(Member member) {
+        return !this.member.equals(member.getNickname());
+    }
+    public void update(CommentRequestDto commentRequestDto) {
+        this.content = commentRequestDto.getContent();
+    }
+    public void update(CommentPutRequestDto commentRequestDto) {
+        this.content = commentRequestDto.getContents();
+    }
 
 }
