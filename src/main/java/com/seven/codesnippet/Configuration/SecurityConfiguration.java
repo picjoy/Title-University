@@ -71,6 +71,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.POST,"/api/posts/heart/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/posts/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/comments/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/subcomments/**").permitAll()
                 .antMatchers("/api/member/logout").permitAll()
                 .antMatchers("/api/bestpost").permitAll()
                 .anyRequest().authenticated()

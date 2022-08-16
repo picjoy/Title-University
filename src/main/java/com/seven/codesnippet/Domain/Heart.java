@@ -24,6 +24,7 @@ public class Heart {
     @JoinColumn(name = "post_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private TitlePost post;
+
     public boolean validateMember(Member member) {
         return !this.member.equals(member);
     }
