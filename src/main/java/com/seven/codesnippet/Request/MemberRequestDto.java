@@ -29,8 +29,6 @@ public class MemberRequestDto {
 
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
-
-
     @Size(min = 8, max = 32, message = "영어 대소문자, 특수문자(!@#$%^&*)를 이용한 비밀번호는 8자 이상 32자 이하로 입력해주세요.")
     @Pattern(regexp = "[a-zA-Z\\d!@#$%^&*]*${8,32}")
     private String password;
