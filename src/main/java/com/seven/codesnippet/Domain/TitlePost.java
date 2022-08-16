@@ -31,13 +31,13 @@ public class TitlePost extends Timestamped{
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @Column
+    @Column(nullable = true)
     private Long heart;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Heart> heartList;
 
-    public void update(Long heart){
+    public void updateHeart(Long heart){
         this.heart = heart;
     }
 
