@@ -24,6 +24,7 @@ public class PostController {
     }
 
     // 게시글 상세 불러오기
+    @ResponseBody
     @RequestMapping(value = "/api/posts/{id}", method = RequestMethod.GET)
     public ResponseDto<?> getPost(@PathVariable Long id, HttpServletRequest request) {
         return postService.getPost(id,request);

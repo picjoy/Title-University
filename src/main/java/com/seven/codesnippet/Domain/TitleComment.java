@@ -27,7 +27,7 @@ public class TitleComment extends Timestamped{
     private List<TitleSubComment> titlecomments;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id", nullable = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private TitlePost post;
 
 

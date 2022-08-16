@@ -29,8 +29,8 @@ public class MemberRequestDto {
 
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
-    @Size(min = 4, max = 32, message = "비밀번호는 8자 이상 20자 이하로 입력해주세요.")
-    @Pattern(regexp = "[a-z\\d]*${3,32}")
+    @Size(min = 4, max = 32, message = "영어 대소문자, 특수문자(!@#$%^&*)를 이용한 비밀번호는 8자 이상 20자 이하로 입력해주세요.")
+    @Pattern(regexp = "[a-zA-Z\\d!@#$%^&*]*${4,32}")
     private String password;
 
     @NotBlank
