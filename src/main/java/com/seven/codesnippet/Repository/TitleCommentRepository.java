@@ -12,5 +12,6 @@ import java.util.Optional;
 @Repository
 public interface TitleCommentRepository extends JpaRepository<TitleComment, Long> {
     List<TitleComment> findAllByPost(TitlePost post);
+    Long countTitleCommentByPost(TitlePost post);
 
 }

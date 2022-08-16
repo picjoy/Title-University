@@ -122,6 +122,7 @@ public class DetailService {
                             .comment(comment.getContent())
                             .postId(comment.getPost().getId())
                             .commentOwner(commentowner)
+                            .subcomment_num((long) commentList.size())
                             .build()
             );
         }

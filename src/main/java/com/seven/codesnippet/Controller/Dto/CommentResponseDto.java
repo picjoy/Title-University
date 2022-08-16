@@ -19,6 +19,7 @@ public class CommentResponseDto{
     private String comment;
     private Long postId;
     private boolean commentOwner;
+    private Long subcomment_num;
 
 
 }
