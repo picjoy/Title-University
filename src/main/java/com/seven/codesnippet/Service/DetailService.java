@@ -87,7 +87,7 @@ public class DetailService {
         boolean postowner;
 //    로그인 되어있을시
         if (member != null) {
-            LikeExist = heartRepository.existsByMemberAndPost(member.getNickname(), post);
+            LikeExist = heartRepository.existsByMemberAndPost(member, post);
             postowner = Objects.equals(post.getMember().getNickname(), member.getNickname());
         }
 //    로그인 안되어있을시
@@ -126,7 +126,7 @@ public class DetailService {
                             .comment(comment.getContent())
                             .postId(comment.getPost().getId())
                             .commentOwner(commentowner)
-                            .subcomment_num((long) commentList.size())
+                            .subcomment_num((long) comment.getTitlecomments().size())
                             .build()
             );
         }

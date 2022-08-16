@@ -23,10 +23,10 @@ public class TitleDetailController {
     private final DetailService detailService;
 
     // 게시물 좋아요
-    @ResponseBody
-    @PostMapping("/api/posts/heart/{postId}")
+    @RequestMapping(value = "/api/posts/heart/{postId}", method = RequestMethod.POST)
     public ResponseDto<?> heartTitle(@PathVariable Long postId, HttpServletRequest request) {
         return detailService.heartTitle(postId, request);
+    }
 
 
 
