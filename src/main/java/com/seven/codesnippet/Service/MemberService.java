@@ -136,14 +136,14 @@ public class MemberService {
             KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
 
             // DB 에 중복된 Kakao Id 가 있는지 확인
-            Long kakaoId = kakaoUserInfo.getId();
+            Long kakaoId = kakaoUserInfo.getKakaoId();
             Member kakaoUser = memberRepository.findByKakaoId(kakaoId);
             if(kakaoUser != null){
                 TokenDto tokenDto = tokenProvider.generateTokenDto(kakaoUser);
                 tokenToHeaders(tokenDto, response);
                 return ResponseDto.success(
                         MemberResponseDto.builder()
-                                .id(kakaoUser.getId())
+                                .id(kakaoUser.getKakaoId())
                                 .email(kakaoUser.getEmail())
                                 .nickname(kakaoUser.getNickname())
                                 .build()
@@ -153,6 +153,7 @@ public class MemberService {
                 // 회원가입
                 Member member = Member.builder()
                         .email(UUID.randomUUID().toString())
+                        .nickname(kakaoUserInfo.getUsername())
                         .password(passwordEncoder.encode(UUID.randomUUID().toString()))
                         .kakaoId(kakaoId)
                         .build();
