@@ -46,7 +46,8 @@ public class MainService {
         List<TitlePost> titlePostList = titlePostRepository.findTop100ByOrderByCreatedAtDesc();
         List<TitlePostListDto> titlePostListDtos = new ArrayList<>();
         for (TitlePost titlepost :titlePostList) {
-            titlePostListDtos.add(new TitlePostListDto(titlepost,titleCommentRepository.countTitleCommentByPost(titlepost)));
+            Long CommentCount = titleCommentRepository.countTitleCommentByPost(titlepost);
+            titlePostListDtos.add(new TitlePostListDto(titlepost,CommentCount));
         }
         return titlePostListDtos;
     }

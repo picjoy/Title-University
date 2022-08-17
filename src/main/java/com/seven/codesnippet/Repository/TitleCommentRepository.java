@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface TitleCommentRepository extends JpaRepository<TitleComment, Long> {
-    List<TitleComment> findByOrderByCreatedAtDesc(TitlePost post);
+    List<TitleComment> findByPostOrderByCreatedAtDesc(TitlePost post);
     Long countTitleCommentByPost(TitlePost post);
 
 }

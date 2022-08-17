@@ -18,8 +18,10 @@ import com.seven.codesnippet.Repository.TitlePostRepository;
 import com.seven.codesnippet.Repository.TitleSubCommentRepository;
 import com.seven.codesnippet.Request.CommentPutRequestDto;
 import com.seven.codesnippet.Request.CommentRequestDto;
+import com.seven.codesnippet.Request.ReCommentPutRequestDto;
 import com.seven.codesnippet.Request.ReCommentRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,7 +102,7 @@ public class DetailService {
     public List<CommentResponseDto> getAllCommentsByPost(Long postId, HttpServletRequest request) {
         TitlePost post = postService.isPresentPost(postId);
         Member member = validateMember(request);
-        List<TitleComment> commentList = titleCommentRepository.findByOrderByCreatedAtDesc(post);
+        List<TitleComment> commentList = titleCommentRepository.findByPostOrderByCreatedAtDesc(post);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
         boolean commentowner;
 //    로그인 되어있을시
@@ -141,11 +143,6 @@ public class DetailService {
         Member member = validateMember(request);
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
-        }
-
-        TitlePost post = postService.isPresentPost(id);
-        if (null == post) {
-            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
         }
 
         TitleComment comment = isPresentComment(id);
@@ -262,7 +259,7 @@ public class DetailService {
     }
 
     @Transactional
-    public ResponseDto<?> updateComment(Long id, ReCommentRequestDto requestDto, HttpServletRequest request) {
+    public ResponseDto<?> updateComment(Long id, ReCommentPutRequestDto requestDto, HttpServletRequest request) {
         if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
@@ -278,14 +275,9 @@ public class DetailService {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
 
-        TitleComment comment = isPresentComment(requestDto.getCommentId());
-        if (null == comment) {
-            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
-        }
-
         TitleSubComment reComment = isPresentReComment(id);
         if (null == reComment) {
-            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 댓글 id 입니다.");
+            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 서브코멘트 id 입니다.");
         }
 
         if (reComment.validateMember(member)) {
@@ -299,22 +291,27 @@ public class DetailService {
 
     @Transactional
     public ResponseDto<?> deleteReComment(Long id, HttpServletRequest request) {
+        System.out.println("---------------------------------먼데 시벌!-------------------");
+        System.out.println(id);
+        System.out.println(request.getHeader("RefreshToken"));
+        System.out.println(request.getHeader("Authorization"));
         if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
+                    "로그인이 필요합니다.RE");
         }
-
+        System.out.println("---------------------------------먼데 시벌!-------------------");
         if (null == request.getHeader("Authorization")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
+                    "로그인이 필요합니다.AC");
         }
-
+        System.out.println("---------------------------------먼데 시벌!-------------------");
         Member member = validateMember(request);
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
-
+        System.out.println("---------------------------------먼데 시벌!-------------------");
         TitleSubComment reComment = isPresentReComment(id);
+        System.out.println(reComment.getContent());
         if (null == reComment) {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 댓글 id 입니다.");
         }
@@ -322,8 +319,9 @@ public class DetailService {
         if (reComment.validateMember(member)) {
             return ResponseDto.fail("BAD_REQUEST", "작성자만 수정할 수 있습니다.");
         }
-
+        System.out.println("---------------------------------먼데 시벌!-------------------");
         titleSubCommentRepository.delete(reComment);
+        System.out.println("---------------------------------삭제 성공적-------------------");
         return ResponseDto.success("success");
     }
 

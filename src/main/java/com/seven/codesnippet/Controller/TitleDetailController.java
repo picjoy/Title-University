@@ -7,6 +7,7 @@ import com.seven.codesnippet.Controller.Dto.ResponseDto;
 
 import com.seven.codesnippet.Request.CommentPutRequestDto;
 import com.seven.codesnippet.Request.CommentRequestDto;
+import com.seven.codesnippet.Request.ReCommentPutRequestDto;
 import com.seven.codesnippet.Request.ReCommentRequestDto;
 import com.seven.codesnippet.Service.DetailService;
 import com.seven.codesnippet.Service.PostService;
@@ -82,7 +83,7 @@ public class TitleDetailController {
 
     // 대댓글 수정 기능
     @RequestMapping(value = "/api/subcomments/{id}", method = RequestMethod.PUT)
-    public ResponseDto<?> updateReComment(@PathVariable Long id, @RequestBody ReCommentRequestDto requestDto, HttpServletRequest request) {
+    public ResponseDto<?> updateReComment(@PathVariable Long id, @RequestBody ReCommentPutRequestDto requestDto, HttpServletRequest request) {
         return detailService.updateComment(id, requestDto, request);
     }
 

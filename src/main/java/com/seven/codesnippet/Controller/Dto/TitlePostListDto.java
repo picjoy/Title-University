@@ -17,7 +17,11 @@ public class TitlePostListDto {
         this.title = titlePost.getTitle();
         this.userNickname = titlePost.getMember().getNickname();
         this.imageUrl = titlePost.getImage();
-        this.like_num = titlePost.getHeart();
         this.comment_num = aLong;
+        if(titlePost.getHeart()==null){
+            this.like_num = Long.valueOf(0);
+        } else {
+            this.like_num = titlePost.getHeart();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.seven.codesnippet.Domain;
 
+import com.seven.codesnippet.Request.ReCommentPutRequestDto;
 import com.seven.codesnippet.Request.ReCommentRequestDto;
 import lombok.*;
 
@@ -33,7 +34,7 @@ public class TitleSubComment extends Timestamped {
         return !this.member.equals(member.getNickname());
     }
 
-    public void update(ReCommentRequestDto requestDto) {
+    public void update(ReCommentPutRequestDto requestDto) {
         this.content = requestDto.getContents();
     }
 }
