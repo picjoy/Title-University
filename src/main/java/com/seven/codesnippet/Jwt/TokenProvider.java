@@ -7,10 +7,18 @@ import com.seven.codesnippet.Domain.UserDetailsImpl;
 import com.seven.codesnippet.Repository.RefreshTokenRepository;
 import com.seven.codesnippet.Request.TokenDto;
 import com.seven.codesnippet.Shared.Authority;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import java.security.Key;
+import java.util.Date;
+import java.util.Optional;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -19,9 +27,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Key;
-import java.util.Date;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -31,6 +36,7 @@ public class TokenProvider {
     private static final String BEARER_PREFIX = "Bearer ";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            //30분
     private static final long REFRESH_TOKEN_EXPRIRE_TIME = 1000 * 60 * 60 * 24 * 7;     //7일
+
 
     private final Key key;
 

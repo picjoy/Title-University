@@ -45,7 +45,7 @@ public class DetailService {
     @Transactional
     public ResponseDto<?> createComment(CommentRequestDto requestDto, HttpServletRequest request) {
 
-        if (null == request.getHeader("Refresh-Token")) {
+        if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
@@ -77,11 +77,8 @@ public class DetailService {
 
     // 특정 게시글 조회
     @Transactional(readOnly = true)
-    public ResponseDto<?> getPost(Long id, HttpServletRequest request) {  // 게시글의 id
+    public PostOwnerDto getPost(Long id, HttpServletRequest request) {  // 게시글의 id
         TitlePost post = postService.isPresentPost(id);
-        if (null == post) {
-            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
-        }
         Member member = validateMember(request);
         boolean LikeExist;
         boolean postowner;
@@ -96,15 +93,12 @@ public class DetailService {
             postowner = false;
         }
         PostOwnerDto posts = new PostOwnerDto(post,LikeExist,postowner);
-        return ResponseDto.success(posts);
+        return posts;
     }
 
     @Transactional(readOnly = true)
-    public ResponseDto<?> getAllCommentsByPost(Long postId, HttpServletRequest request) {
+    public List<CommentResponseDto> getAllCommentsByPost(Long postId, HttpServletRequest request) {
         TitlePost post = postService.isPresentPost(postId);
-        if (null == post) {
-            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
-        }
         Member member = validateMember(request);
         List<TitleComment> commentList = titleCommentRepository.findAllByPost(post);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
@@ -130,12 +124,12 @@ public class DetailService {
                             .build()
             );
         }
-        return ResponseDto.success(commentResponseDtoList);
+        return commentResponseDtoList;
     }
 
     @Transactional
     public ResponseDto<?> updateComment(Long id, CommentPutRequestDto requestDto, HttpServletRequest request) {
-        if (null == request.getHeader("Refresh-Token")) {
+        if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
@@ -171,7 +165,7 @@ public class DetailService {
 
     @Transactional
     public ResponseDto<?> deleteComment(Long id, HttpServletRequest request) {
-        if (null == request.getHeader("Refresh-Token")) {
+        if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
@@ -207,7 +201,7 @@ public class DetailService {
 
     @Transactional
     public Member validateMember(HttpServletRequest request) {
-        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
+        if (!tokenProvider.validateToken(request.getHeader("RefreshToken"))) {
             return null;
         }
         return tokenProvider.getMemberFromAuthentication();
@@ -219,7 +213,7 @@ public class DetailService {
     @Transactional  // 공통으로 들어가는 Response에 대한 Dto
     public ResponseDto<?> createRecomment(ReCommentRequestDto requestDto, HttpServletRequest request) {
         // 요청의 헤더에 토큰 있늬?
-        if (null == request.getHeader("Refresh-Token")) {
+        if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
@@ -255,11 +249,8 @@ public class DetailService {
 
     // 특정 댓글을 바라보는 모든 대댓글 조회
     @Transactional(readOnly = true)
-    public ResponseDto<?> getAllReCommentsByCommentId(Long commentId) {
+    public List<ReCommentResponseDto> getAllReCommentsByCommentId(Long commentId) {
         TitleComment comment = isPresentComment(commentId);
-        if (null == comment) {
-            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 댓글 id 입니다.");
-        }
 
         List<TitleSubComment> reCommentList = titleSubCommentRepository.findAllByCommentId(commentId);
         List<ReCommentResponseDto> reCommentResponseDtoList = new ArrayList<>();
@@ -268,12 +259,12 @@ public class DetailService {
             reCommentResponseDtoList.add(new ReCommentResponseDto(reComment)
             );
         }
-        return ResponseDto.success(reCommentResponseDtoList);
+        return reCommentResponseDtoList;
     }
 
     @Transactional
     public ResponseDto<?> updateComment(Long id, ReCommentRequestDto requestDto, HttpServletRequest request) {
-        if (null == request.getHeader("Refresh-Token")) {
+        if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
@@ -309,7 +300,7 @@ public class DetailService {
 
     @Transactional
     public ResponseDto<?> deleteReComment(Long id, HttpServletRequest request) {
-        if (null == request.getHeader("Refresh-Token")) {
+        if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
@@ -348,7 +339,7 @@ public class DetailService {
     // 게시글 좋아요 & 취소
     public ResponseDto<?> heartTitle(Long postId, HttpServletRequest request) {
 
-        if (null == request.getHeader("Refresh-Token")) {
+        if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }

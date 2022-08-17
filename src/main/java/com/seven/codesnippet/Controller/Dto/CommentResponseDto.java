@@ -20,6 +20,4 @@ public class CommentResponseDto{
     private Long postId;
     private boolean commentOwner;
     private Long subcomment_num;
-
-
 }
