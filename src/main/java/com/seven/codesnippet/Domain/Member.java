@@ -60,4 +60,6 @@ public class Member {
         return passwordEncoder.matches(password, this.password);
     }
 
+
+
 }

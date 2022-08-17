@@ -1,5 +1,6 @@
 package com.seven.codesnippet.Controller;
 
+import com.seven.codesnippet.Controller.Dto.NicknameResponseDto;
 import com.seven.codesnippet.Controller.Dto.ResponseDto;
 import com.seven.codesnippet.Request.LoginRequestDto;
 import com.seven.codesnippet.Request.MemberRequestDto;
@@ -41,9 +42,15 @@ public class MemberController {
         return ResponseEntity.ok(memberService.checkEmail(email));
     }
 
-    @GetMapping("/api/member/nicknameCheck/{nickname}")
-    public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname){
+    @GetMapping("/api/member/nicknameCheck/{nicknamie}")
+public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname){
         return ResponseEntity.ok(memberService.checkNickname(nickname));
+    }
+
+    @GetMapping("/api/member/info")
+    public NicknameResponseDto mypage(){
+        return memberService.info();
+
     }
 
 
