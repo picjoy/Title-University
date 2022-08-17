@@ -12,10 +12,7 @@ import com.seven.codesnippet.Controller.Dto.TopTenDto;
 import com.seven.codesnippet.Domain.Member;
 import com.seven.codesnippet.Domain.TitlePost;
 import com.seven.codesnippet.Jwt.TokenProvider;
-import com.seven.codesnippet.Repository.HeartRepository;
-import com.seven.codesnippet.Repository.TitleCommentRepository;
-import com.seven.codesnippet.Repository.TitlePostRepository;
-import com.seven.codesnippet.Repository.TitleSubCommentRepository;
+import com.seven.codesnippet.Repository.*;
 import com.seven.codesnippet.Shared.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +36,7 @@ public class PostService {
 
     private final TitlePostRepository titlePostRepository;
     private final TokenProvider tokenProvider;
+    private final MemberRepository memberRepository;
     private final HeartRepository heartRepository;
     private final AmazonS3Client amazonS3Client;
 
@@ -47,21 +46,10 @@ public class PostService {
 
     // 게시글 작성
     @Transactional
-    public ResponseDto<?> createPost(String title, HttpServletRequest request, MultipartFile multipartFile) throws IOException {
-        if (null == request.getHeader("Refresh-Token")) {
-            return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
-        }
+    public ResponseDto<?> createPost(String title,HttpServletRequest request,MultipartFile multipartFile) throws IOException {
 
-        if (null == request.getHeader("Authorization")) {
-            return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
-        }
 
-        Member member = validateMember(request);
-        if (null == member) {
-            return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
-        }
+        Member member = memberRepository.getReferenceById(1L);
         String imgurl = null;
 
         if (!multipartFile.isEmpty()) {
@@ -91,7 +79,7 @@ public class PostService {
 
     @Transactional
     public ResponseDto<?> deletePost(Long id, HttpServletRequest request) {
-        if (null == request.getHeader("Refresh-Token")) {
+        if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
@@ -127,7 +115,7 @@ public class PostService {
 
     @Transactional
     public Member validateMember(HttpServletRequest request) {
-        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
+        if (!tokenProvider.validateToken(request.getHeader("RefreshToken"))) {
             return null;
         }
         return tokenProvider.getMemberFromAuthentication();

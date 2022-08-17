@@ -2,6 +2,7 @@ package com.seven.codesnippet.Service;
 
 
 import com.seven.codesnippet.Controller.Dto.MemberResponseDto;
+import com.seven.codesnippet.Controller.Dto.NicknameResponseDto;
 import com.seven.codesnippet.Controller.Dto.ResponseDto;
 import com.seven.codesnippet.Domain.Member;
 import com.seven.codesnippet.Jwt.TokenProvider;
@@ -27,13 +28,14 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     private final TokenProvider tokenProvider;
+
     public ResponseDto<?> createMember(MemberRequestDto requestDto) {
-        if (null != isPresentEmail(requestDto.getEmail())){
+        if (null != isPresentEmail(requestDto.getEmail())) {
             return ResponseDto.fail("DUPLICATED_EMAIL",
                     "중복된 이메일 입니다.");
         }
 
-        if (null != isPresentNickName(requestDto.getNickname())){
+        if (null != isPresentNickName(requestDto.getNickname())) {
             return ResponseDto.fail("DUPLICATED_NICKNAME",
                     "중복된 닉네임 입니다.");
         }
@@ -86,7 +88,11 @@ public class MemberService {
 
 
     public ResponseDto<?> logout(HttpServletRequest request) {
-        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
+        System.out.println(request.getHeader("refreshtoken"));
+        System.out.println(request.getHeader("refreshToken"));
+        System.out.println(request.getHeader("RefreshToken"));
+        System.out.println(request.getHeader("Refreshtoken"));
+        if (!tokenProvider.validateToken(request.getHeader("refreshtoken"))) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
         Member member = tokenProvider.getMemberFromAuthentication();
@@ -112,7 +118,7 @@ public class MemberService {
 
     private void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
+        response.addHeader("RefreshToken", tokenDto.getRefreshToken());
         response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
@@ -123,9 +129,15 @@ public class MemberService {
     }
 
     // 닉네임 중복 체크
-   public boolean checkNickname(String nickname) {
+    public boolean checkNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
     }
 
-
+    //    닉네임 가져오기
+    public NicknameResponseDto info() {
+        Member member = memberRepository.getReferenceById(1L);
+        return NicknameResponseDto.builder()
+                        .nickname(member.getNickname())
+                        .build();
+    }
 }

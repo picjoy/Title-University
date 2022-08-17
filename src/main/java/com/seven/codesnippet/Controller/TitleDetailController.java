@@ -1,5 +1,8 @@
 package com.seven.codesnippet.Controller;
 
+import com.seven.codesnippet.Controller.Dto.CommentResponseDto;
+import com.seven.codesnippet.Controller.Dto.PostOwnerDto;
+import com.seven.codesnippet.Controller.Dto.ReCommentResponseDto;
 import com.seven.codesnippet.Controller.Dto.ResponseDto;
 
 import com.seven.codesnippet.Request.CommentPutRequestDto;
@@ -14,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,14 +44,14 @@ public class TitleDetailController {
     // 게시글 상세 불러오기
 
     @RequestMapping(value = "/api/posts/{id}", method = RequestMethod.GET)
-    public ResponseDto<?> getPost(@PathVariable Long id, HttpServletRequest request) {
+    public PostOwnerDto getPost(@PathVariable Long id, HttpServletRequest request) {
         return detailService.getPost(id,request);
     }
 
 //    게시글 상세 불러오기(댓글)
-    @RequestMapping(value = "/api/comments/{id}", method = RequestMethod.GET)
-    public ResponseDto<?> getAllComments(@PathVariable Long id,HttpServletRequest request) {
-        return detailService.getAllCommentsByPost(id,request);
+    @RequestMapping(value = "/api/comments", method = RequestMethod.GET)
+    public List<CommentResponseDto> getAllComments(@RequestParam Long postId, HttpServletRequest request) {
+        return detailService.getAllCommentsByPost(postId,request);
     }
 
 // 댓글 수정
@@ -71,9 +75,9 @@ public class TitleDetailController {
     }
 
     // 게시글 댓글을 바라보는 **모든 대댓글 조회
-    @RequestMapping(value = "/api/subcomments/{id}", method = RequestMethod.GET)
-    public ResponseDto<?> getAllReComments(@PathVariable Long id) {
-        return detailService.getAllReCommentsByCommentId(id);
+    @RequestMapping(value = "/api/subcomments", method = RequestMethod.GET)
+    public List<ReCommentResponseDto> getAllReComments(@RequestParam Long commentId) {
+        return detailService.getAllReCommentsByCommentId(commentId);
     }
 
     // 대댓글 수정 기능
