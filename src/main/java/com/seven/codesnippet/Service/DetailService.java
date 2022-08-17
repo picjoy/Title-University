@@ -100,7 +100,7 @@ public class DetailService {
     public List<CommentResponseDto> getAllCommentsByPost(Long postId, HttpServletRequest request) {
         TitlePost post = postService.isPresentPost(postId);
         Member member = validateMember(request);
-        List<TitleComment> commentList = titleCommentRepository.findAllByPost(post);
+        List<TitleComment> commentList = titleCommentRepository.findByOrderByCreatedAtDesc(post);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
         boolean commentowner;
 //    로그인 되어있을시
@@ -111,7 +111,6 @@ public class DetailService {
         else {
             commentowner = false;
         }
-
         for (TitleComment comment : commentList) {
             commentResponseDtoList.add(
                     CommentResponseDto.builder()
@@ -120,7 +119,7 @@ public class DetailService {
                             .comment(comment.getContent())
                             .postId(comment.getPost().getId())
                             .commentOwner(commentowner)
-                            .subcomment_num((long) comment.getTitlecomments().size())
+                            .subComment_num((long) comment.getTitlecomments().size())
                             .build()
             );
         }
@@ -252,7 +251,7 @@ public class DetailService {
     public List<ReCommentResponseDto> getAllReCommentsByCommentId(Long commentId) {
         TitleComment comment = isPresentComment(commentId);
 
-        List<TitleSubComment> reCommentList = titleSubCommentRepository.findAllByCommentId(commentId);
+        List<TitleSubComment> reCommentList = titleSubCommentRepository.findAllByCommentIdOrderByCreatedAtDesc(commentId);
         List<ReCommentResponseDto> reCommentResponseDtoList = new ArrayList<>();
 
         for (TitleSubComment reComment : reCommentList) {

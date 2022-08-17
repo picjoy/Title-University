@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TitleSubCommentRepository extends JpaRepository<TitleSubComment, Long> {
-    List<TitleSubComment> findAllByCommentId(Long id);
+    List<TitleSubComment> findAllByCommentIdOrderByCreatedAtDesc(Long id);
 }

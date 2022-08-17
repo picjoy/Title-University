@@ -32,7 +32,7 @@ public class MainService {
 
     public List<TopTenDto> BestList(HttpServletRequest request){
         Member member = validateMember(request);
-        List<TitlePost> titlePostList = titlePostRepository.findTop10ByHeartGreaterThanOrderByHeartDesc(10L);
+        List<TitlePost> titlePostList = titlePostRepository.findTop10ByHeartGreaterThanOrderByCreatedAtDesc(10L);
         List<TopTenDto> toptenDto = new ArrayList<>();
         for (TitlePost titlepost :titlePostList) {
             Boolean LikeExist = heartRepository.existsByMemberAndPost(member,titlepost);
