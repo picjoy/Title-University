@@ -28,6 +28,11 @@ public class Member {
 
     @Column(nullable = false)
     private String nickname;
+/*
+        카카오톡
+    @Column(nullable = false)
+    private Long kakaoId;
+*/
 
     @Override
     public boolean equals(Object o) {
@@ -59,7 +64,20 @@ public class Member {
     public boolean validatePassword(PasswordEncoder passwordEncoder, String password) {
         return passwordEncoder.matches(password, this.password);
     }
+/*
+        카카오톡
+    public boolean Member (Object o) {
+        if (this== o){
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)){
+            return false;
+        }
+        Member member = (Member) o;
+        return id != null && Objects.equals(id, member.id);
+    }
 
+*/
 
 
 }
