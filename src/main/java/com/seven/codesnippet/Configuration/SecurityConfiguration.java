@@ -75,6 +75,8 @@ public class SecurityConfiguration {
                 .antMatchers("/api/member/logout").permitAll()
                 .antMatchers("/api/bestpost").permitAll()
                 .anyRequest().authenticated()
+/*                .and()        카카오톡
+                .oauth2Login()*/
 
 
                 .and()
