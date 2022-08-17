@@ -1,6 +1,11 @@
 package com.seven.codesnippet.Configuration;
 
 
+
+import com.seven.codesnippet.Jwt.AccessDeniedHandlerException;
+import com.seven.codesnippet.Jwt.AuthenticationEntryPointException;
+import com.seven.codesnippet.Jwt.TokenProvider;
+import com.seven.codesnippet.Service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -9,8 +14,10 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +30,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class SecurityConfiguration {
 
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+// h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
+        return (web) -> web.ignoring()
+                .antMatchers("/h2-console/**");
+    }
+
+    @Value("${jwt.secret}")
+    String SECRET_KEY;
+    private final TokenProvider tokenProvider;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthenticationEntryPointException authenticationEntryPointException;
+    private final AccessDeniedHandlerException accessDeniedHandlerException;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,18 +58,29 @@ public class SecurityConfiguration {
         http.csrf().disable()
 
                 .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPointException)
+                .accessDeniedHandler(accessDeniedHandlerException)
 
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
-                .headers().frameOptions().disable()
+                .authorizeRequests()
+                .antMatchers("/api/member/**").permitAll()
+                .antMatchers("/api/posts/heart/**").permitAll()
+                .antMatchers("/api/posts/**").permitAll()
+                .antMatchers("/api/comments/**").permitAll()
+                .antMatchers("/api/subcomments/**").permitAll()
+                .antMatchers("/api/member/logout").permitAll()
+                .antMatchers("/api/bestpost").permitAll()
+                .anyRequest().authenticated()
+/*                .and()        카카오톡
+                .oauth2Login()*/
+
 
                 .and()
-                .authorizeRequests()
-                .antMatchers("/h2-console/**").permitAll()
-                .anyRequest().permitAll();
+                .apply(new JwtSecurityConfiguration(SECRET_KEY, tokenProvider, userDetailsService));
 
         return http.build();
     }
