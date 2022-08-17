@@ -54,4 +54,11 @@ public class MemberController {
     }
 
 
+/*      카카오톡
+    @GetMapping("/user/kakao/callback")
+    public ResponseDto<?> kakaoLogin(@RequestParam String code, HttpServletResponse response){
+        return memberService.kakaoLogin(code, response);
+    }
+*/
+
 }
