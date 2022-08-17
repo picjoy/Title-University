@@ -32,7 +32,7 @@ public class MainService {
 
     public List<TopTenDto> BestList(HttpServletRequest request){
         Member member = validateMember(request);
-        List<TitlePost> titlePostList = titlePostRepository.findTop10ByHeartGreaterThanOrderByHeartDesc(10L);
+        List<TitlePost> titlePostList = titlePostRepository.findTop10ByHeartGreaterThanOrderByCreatedAtDesc(10L);
         List<TopTenDto> toptenDto = new ArrayList<>();
         for (TitlePost titlepost :titlePostList) {
             Boolean LikeExist = heartRepository.existsByMemberAndPost(member,titlepost);
@@ -46,7 +46,8 @@ public class MainService {
         List<TitlePost> titlePostList = titlePostRepository.findTop100ByOrderByCreatedAtDesc();
         List<TitlePostListDto> titlePostListDtos = new ArrayList<>();
         for (TitlePost titlepost :titlePostList) {
-            titlePostListDtos.add(new TitlePostListDto(titlepost,titleCommentRepository.countTitleCommentByPost(titlepost)));
+            Long CommentCount = titleCommentRepository.countTitleCommentByPost(titlepost);
+            titlePostListDtos.add(new TitlePostListDto(titlepost,CommentCount));
         }
         return titlePostListDtos;
     }

@@ -21,7 +21,7 @@
 <summary> Join Membership  </summary>
 <div markdown="1">       
 <br>
-  전체적으로 응답 바디에 HTTP Status Code와 메세지를 출력하도록 구현
+  전체적으로 응답 바디에 오류 코드( ex : "NOT_FOUND" )와 메세지( ex : "존재하지 않는 게시글 id 입니다." )를 출력하도록 구현
 <br><br>
 유효성 검사를 통해 ID중복, Nickname중복 등 기본적인 기능 구현
 

@@ -47,9 +47,21 @@ public class PostService {
     // 게시글 작성
     @Transactional
     public ResponseDto<?> createPost(String title,HttpServletRequest request,MultipartFile multipartFile) throws IOException {
+        if (null == request.getHeader("RefreshToken")) {
+            return ResponseDto.fail("MEMBER_NOT_FOUND",
+                    "로그인이 필요합니다.");
+        }
 
+        if (null == request.getHeader("Authorization")) {
+            return ResponseDto.fail("MEMBER_NOT_FOUND",
+                    "로그인이 필요합니다.");
+        }
 
-        Member member = memberRepository.getReferenceById(1L);
+        Member member = validateMember(request);
+        if (null == member) {
+            return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
+        }
+
         String imgurl = null;
 
         if (!multipartFile.isEmpty()) {

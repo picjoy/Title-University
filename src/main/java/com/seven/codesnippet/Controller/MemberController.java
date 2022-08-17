@@ -42,8 +42,8 @@ public class MemberController {
         return ResponseEntity.ok(memberService.checkEmail(email));
     }
 
-    @GetMapping("/api/member/nicknameCheck/{nicknamie}")
-public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname){
+    @GetMapping("/api/member/nicknameCheck/{nickname}")
+    public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname){
         return ResponseEntity.ok(memberService.checkNickname(nickname));
     }
 
