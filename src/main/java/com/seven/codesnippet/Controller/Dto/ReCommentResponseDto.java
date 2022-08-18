@@ -18,13 +18,15 @@ public class ReCommentResponseDto {
         private String subComment;
         private Long commentId;
         private Long postId;
+        private boolean subCommentOwner;
 
-        public ReCommentResponseDto(TitleSubComment entity) {
+        public ReCommentResponseDto(TitleSubComment entity, boolean a) {
                 this.id = entity.getId();
                 this.userSubCommented = entity.getMember();
                 this.subComment = entity.getContent();
                 this.postId = entity.getComment().getPost().getId();
                 this.commentId = entity.getComment().getId();
+                this.subCommentOwner = a;
         }
 
 }

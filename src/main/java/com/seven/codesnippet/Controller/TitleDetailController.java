@@ -77,8 +77,8 @@ public class TitleDetailController {
 
     // 게시글 댓글을 바라보는 **모든 대댓글 조회
     @RequestMapping(value = "/api/subcomments", method = RequestMethod.GET)
-    public List<ReCommentResponseDto> getAllReComments(@RequestParam Long commentId) {
-        return detailService.getAllReCommentsByCommentId(commentId);
+    public List<ReCommentResponseDto> getAllReComments(@RequestParam Long commentId, HttpServletRequest request) {
+        return detailService.getAllReCommentsByCommentId(commentId, request);
     }
 
     // 대댓글 수정 기능

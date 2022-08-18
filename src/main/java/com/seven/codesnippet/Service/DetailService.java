@@ -245,15 +245,22 @@ public class DetailService {
 
     // 특정 댓글을 바라보는 모든 대댓글 조회
     @Transactional(readOnly = true)
-    public List<ReCommentResponseDto> getAllReCommentsByCommentId(Long commentId) {
-        TitleComment comment = isPresentComment(commentId);
-
+    public List<ReCommentResponseDto> getAllReCommentsByCommentId(Long commentId, HttpServletRequest request) {
+        Member member = validateMember(request);
+        boolean commentowner;
         List<TitleSubComment> reCommentList = titleSubCommentRepository.findAllByCommentIdOrderByCreatedAtDesc(commentId);
         List<ReCommentResponseDto> reCommentResponseDtoList = new ArrayList<>();
-
         for (TitleSubComment reComment : reCommentList) {
-            reCommentResponseDtoList.add(new ReCommentResponseDto(reComment)
-            );
+            //    로그인 되어있을시
+            if (member != null) {
+                commentowner = Objects.equals(reComment.getMember(), member.getNickname());
+            }
+//    로그인 안되어있을시
+            else {
+                commentowner = false;
+            }
+
+            reCommentResponseDtoList.add(new ReCommentResponseDto(reComment,commentowner));
         }
         return reCommentResponseDtoList;
     }
@@ -291,25 +298,18 @@ public class DetailService {
 
     @Transactional
     public ResponseDto<?> deleteReComment(Long id, HttpServletRequest request) {
-        System.out.println("---------------------------------먼데 시벌!-------------------");
-        System.out.println(id);
-        System.out.println(request.getHeader("RefreshToken"));
-        System.out.println(request.getHeader("Authorization"));
         if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.RE");
         }
-        System.out.println("---------------------------------먼데 시벌!-------------------");
         if (null == request.getHeader("Authorization")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.AC");
         }
-        System.out.println("---------------------------------먼데 시벌!-------------------");
         Member member = validateMember(request);
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
-        System.out.println("---------------------------------먼데 시벌!-------------------");
         TitleSubComment reComment = isPresentReComment(id);
         System.out.println(reComment.getContent());
         if (null == reComment) {
@@ -319,9 +319,7 @@ public class DetailService {
         if (reComment.validateMember(member)) {
             return ResponseDto.fail("BAD_REQUEST", "작성자만 수정할 수 있습니다.");
         }
-        System.out.println("---------------------------------먼데 시벌!-------------------");
         titleSubCommentRepository.delete(reComment);
-        System.out.println("---------------------------------삭제 성공적-------------------");
         return ResponseDto.success("success");
     }
 
