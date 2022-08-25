@@ -29,8 +29,10 @@
 <img src="https://img.shields.io/badge/Springboot-4FC08D?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/springsecurity-7952B3?style=for-the-badge&logo=springsecurity&logoColor=white">
 <img src="https://img.shields.io/badge/mysql-61DAFB?style=for-the-badge&logo=mysql&logoColor=white">
-</div>
-* * *
+</div> <br>
+
+<br>
+
 ###  회원가입
 <details>
 <summary> Join Membership  </summary>
