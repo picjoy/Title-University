@@ -3,7 +3,7 @@
 ![](https://velog.velcdn.com/images/piczo/post/7441e92a-b65c-4bb6-bca2-af1d56bde74e/image.png)
 
 ### FrontEnd : 김예림, 박수원
-### BackEnd : 조원영, 강지영, 김재경
+### BackEnd : 조원영, 강지영
 ### 내가 가진 짤방으로 대회 열기!
 * **내가 가지고 있는 짤방으로 제목학원의 대회를 열어 엄청나게 적절한 제목을 달아서 감탄이 절로 나오는 제목을 만들어봅시다!**
 
