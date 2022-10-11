@@ -18,8 +18,10 @@ import com.seven.codesnippet.Repository.TitlePostRepository;
 import com.seven.codesnippet.Repository.TitleSubCommentRepository;
 import com.seven.codesnippet.Request.CommentPutRequestDto;
 import com.seven.codesnippet.Request.CommentRequestDto;
+import com.seven.codesnippet.Request.ReCommentPutRequestDto;
 import com.seven.codesnippet.Request.ReCommentRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,7 +102,7 @@ public class DetailService {
     public List<CommentResponseDto> getAllCommentsByPost(Long postId, HttpServletRequest request) {
         TitlePost post = postService.isPresentPost(postId);
         Member member = validateMember(request);
-        List<TitleComment> commentList = titleCommentRepository.findAllByPost(post);
+        List<TitleComment> commentList = titleCommentRepository.findByPostOrderByCreatedAtDesc(post);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
         boolean commentowner;
 //    로그인 되어있을시
@@ -111,7 +113,6 @@ public class DetailService {
         else {
             commentowner = false;
         }
-
         for (TitleComment comment : commentList) {
             commentResponseDtoList.add(
                     CommentResponseDto.builder()
@@ -120,7 +121,7 @@ public class DetailService {
                             .comment(comment.getContent())
                             .postId(comment.getPost().getId())
                             .commentOwner(commentowner)
-                            .subcomment_num((long) comment.getTitlecomments().size())
+                            .subComment_num((long) comment.getTitlecomments().size())
                             .build()
             );
         }
@@ -142,11 +143,6 @@ public class DetailService {
         Member member = validateMember(request);
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
-        }
-
-        TitlePost post = postService.isPresentPost(id);
-        if (null == post) {
-            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
         }
 
         TitleComment comment = isPresentComment(id);
@@ -249,21 +245,28 @@ public class DetailService {
 
     // 특정 댓글을 바라보는 모든 대댓글 조회
     @Transactional(readOnly = true)
-    public List<ReCommentResponseDto> getAllReCommentsByCommentId(Long commentId) {
-        TitleComment comment = isPresentComment(commentId);
-
-        List<TitleSubComment> reCommentList = titleSubCommentRepository.findAllByCommentId(commentId);
+    public List<ReCommentResponseDto> getAllReCommentsByCommentId(Long commentId, HttpServletRequest request) {
+        Member member = validateMember(request);
+        boolean commentowner;
+        List<TitleSubComment> reCommentList = titleSubCommentRepository.findAllByCommentIdOrderByCreatedAtDesc(commentId);
         List<ReCommentResponseDto> reCommentResponseDtoList = new ArrayList<>();
-
         for (TitleSubComment reComment : reCommentList) {
-            reCommentResponseDtoList.add(new ReCommentResponseDto(reComment)
-            );
+            //    로그인 되어있을시
+            if (member != null) {
+                commentowner = Objects.equals(reComment.getMember(), member.getNickname());
+            }
+//    로그인 안되어있을시
+            else {
+                commentowner = false;
+            }
+
+            reCommentResponseDtoList.add(new ReCommentResponseDto(reComment,commentowner));
         }
         return reCommentResponseDtoList;
     }
 
     @Transactional
-    public ResponseDto<?> updateComment(Long id, ReCommentRequestDto requestDto, HttpServletRequest request) {
+    public ResponseDto<?> updateComment(Long id, ReCommentPutRequestDto requestDto, HttpServletRequest request) {
         if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
@@ -279,14 +282,9 @@ public class DetailService {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
 
-        TitleComment comment = isPresentComment(requestDto.getCommentId());
-        if (null == comment) {
-            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
-        }
-
         TitleSubComment reComment = isPresentReComment(id);
         if (null == reComment) {
-            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 댓글 id 입니다.");
+            return ResponseDto.fail("NOT_FOUND", "존재하지 않는 서브코멘트 id 입니다.");
         }
 
         if (reComment.validateMember(member)) {
@@ -302,20 +300,18 @@ public class DetailService {
     public ResponseDto<?> deleteReComment(Long id, HttpServletRequest request) {
         if (null == request.getHeader("RefreshToken")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
+                    "로그인이 필요합니다.RE");
         }
-
         if (null == request.getHeader("Authorization")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
+                    "로그인이 필요합니다.AC");
         }
-
         Member member = validateMember(request);
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
-
         TitleSubComment reComment = isPresentReComment(id);
+        System.out.println(reComment.getContent());
         if (null == reComment) {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 댓글 id 입니다.");
         }
@@ -323,7 +319,6 @@ public class DetailService {
         if (reComment.validateMember(member)) {
             return ResponseDto.fail("BAD_REQUEST", "작성자만 수정할 수 있습니다.");
         }
-
         titleSubCommentRepository.delete(reComment);
         return ResponseDto.success("success");
     }

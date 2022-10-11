@@ -28,9 +28,8 @@ public class Member {
 
     @Column(nullable = false)
     private String nickname;
-/*
-        카카오톡
-    @Column(nullable = false)
+/*              카카오톡 로그인
+    @Column(nullable = true)
     private Long kakaoId;
 */
 

@@ -3,7 +3,7 @@
 ![](https://velog.velcdn.com/images/piczo/post/7441e92a-b65c-4bb6-bca2-af1d56bde74e/image.png)
 
 ### FrontEnd : 김예림, 박수원
-### BackEnd : 조원영, 강지영, 김재경
+### BackEnd : 조원영, 강지영
 ### 내가 가진 짤방으로 대회 열기!
 * **내가 가지고 있는 짤방으로 제목학원의 대회를 열어 엄청나게 적절한 제목을 달아서 감탄이 절로 나오는 제목을 만들어봅시다!**
 
@@ -15,13 +15,30 @@
 
 
 ## ✨ 기능설명
-* * *
+
+<div>
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/react-0769AD?style=for-the-badge&logo=react&logoColor=white">
+<img src="https://img.shields.io/badge/html-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+<img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/ubuntu-FCC624?style=for-the-badge&logo=ubuntu&logoColor=black">
+<img src="https://img.shields.io/badge/aws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
+<img src="https://img.shields.io/badge/spring-F80000?style=for-the-badge&logo=spring&logoColor=white">
+<img src="https://img.shields.io/badge/Springboot-4FC08D?style=for-the-badge&logo=springboot&logoColor=white">
+<img src="https://img.shields.io/badge/springsecurity-7952B3?style=for-the-badge&logo=springsecurity&logoColor=white">
+<img src="https://img.shields.io/badge/mysql-61DAFB?style=for-the-badge&logo=mysql&logoColor=white">
+</div> <br>
+
+<br>
+
 ###  회원가입
 <details>
 <summary> Join Membership  </summary>
 <div markdown="1">       
 <br>
-  전체적으로 응답 바디에 HTTP Status Code와 메세지를 출력하도록 구현
+  전체적으로 응답 바디에 오류 코드( ex : "NOT_FOUND" )와 메세지( ex : "존재하지 않는 게시글 id 입니다." )를 출력하도록 구현
 <br><br>
 유효성 검사를 통해 ID중복, Nickname중복 등 기본적인 기능 구현
 
@@ -99,5 +116,5 @@
 
 ### 🐛 트러블 슈팅
 * * *
-트러블 슈팅 한눈에 보기
+[트러블 슈팅 한눈에 보기](https://www.notion.so/3e8d6c91e79945439542128329b3264e)
 

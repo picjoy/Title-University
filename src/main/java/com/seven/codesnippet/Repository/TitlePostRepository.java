@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface TitlePostRepository extends JpaRepository<TitlePost, Long> {
     List<TitlePost> findTop100ByOrderByCreatedAtDesc();
-    List<TitlePost> findTop10ByHeartGreaterThanOrderByHeartDesc(Long than);
+    List<TitlePost> findTop10ByHeartGreaterThanOrderByCreatedAtDesc(Long than);
 }

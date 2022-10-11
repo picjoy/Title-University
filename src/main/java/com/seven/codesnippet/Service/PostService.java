@@ -46,25 +46,35 @@ public class PostService {
 
     // 게시글 작성
     @Transactional
-    public ResponseDto<?> createPost(String title,HttpServletRequest request,MultipartFile multipartFile) throws IOException {
-
-
-        Member member = memberRepository.getReferenceById(1L);
-        String imgurl = null;
-
-        if (!multipartFile.isEmpty()) {
-            String fileName = CommonUtils.buildFileName(multipartFile.getOriginalFilename());
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentType(multipartFile.getContentType());
-
-            byte[] bytes = IOUtils.toByteArray(multipartFile.getInputStream());
-            objectMetadata.setContentLength(bytes.length);
-            ByteArrayInputStream byteArrayIs = new ByteArrayInputStream(bytes);
-
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, byteArrayIs, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-            imgurl = amazonS3Client.getUrl(bucketName, fileName).toString();
+    public ResponseDto<?> createPost(String title, HttpServletRequest request, MultipartFile multipartFile) throws IOException {
+        if (null == request.getHeader("RefreshToken")) {
+            return ResponseDto.fail("MEMBER_NOT_FOUND",
+                    "로그인이 필요합니다.");
         }
+
+        if (null == request.getHeader("Authorization")) {
+            return ResponseDto.fail("MEMBER_NOT_FOUND",
+                    "로그인이 필요합니다.");
+        }
+
+        Member member = validateMember(request);
+        if (null == member) {
+            return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
+        }
+
+
+
+        String fileName = CommonUtils.buildFileName(multipartFile.getOriginalFilename());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(multipartFile.getContentType());
+
+        byte[] bytes = IOUtils.toByteArray(multipartFile.getInputStream());
+        objectMetadata.setContentLength(bytes.length);
+        ByteArrayInputStream byteArrayIs = new ByteArrayInputStream(bytes);
+
+        amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, byteArrayIs, objectMetadata)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        String imgurl = amazonS3Client.getUrl(bucketName, fileName).toString();
 
 
         TitlePost post = TitlePost.builder()

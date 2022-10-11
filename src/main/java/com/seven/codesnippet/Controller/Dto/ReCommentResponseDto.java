@@ -14,17 +14,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReCommentResponseDto {
         private Long id;
-        private String userCommented;
-        private String contents;
-        private Long postId;
+        private String userSubCommented;
+        private String subComment;
         private Long commentId;
+        private Long postId;
+        private boolean subCommentOwner;
 
-        public ReCommentResponseDto(TitleSubComment entity) {
+        public ReCommentResponseDto(TitleSubComment entity, boolean a) {
                 this.id = entity.getId();
-                this.userCommented = entity.getMember();
-                this.contents = entity.getContent();
+                this.userSubCommented = entity.getMember();
+                this.subComment = entity.getContent();
                 this.postId = entity.getComment().getPost().getId();
                 this.commentId = entity.getComment().getId();
+                this.subCommentOwner = a;
         }
 
 }
